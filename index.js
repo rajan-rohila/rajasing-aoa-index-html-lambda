@@ -45,6 +45,8 @@ export const handler = async (event, context, callback) => {
     const qs = req.querystring;
     const query = queryString.parse(qs);
 
+    console.log("Query is" + JSON.stringify(query));
+
     if (typeof query.shop !== "string") {
         callback(null, responseForNoShopParam);
         return true;
