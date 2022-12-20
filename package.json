@@ -1,0 +1,17 @@
+{
+  "name": "rajasing-aoa-index-html-lambda",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "query-string": "^8.0.3",
+    "shopify-api": "^0.2.3",
+    "uuid": "^9.0.0"
+  }
+}
