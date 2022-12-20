@@ -8,11 +8,11 @@ import queryString from 'query-string';
 import { AppInstallations } from './app_installations.js';
 
 Shopify.Context.initialize({
-    API_KEY: process.env.SHOPIFY_API_KEY,
-    API_SECRET_KEY: process.env.SHOPIFY_API_SECRET,
-    SCOPES: process.env.SCOPES.split(","),
-    HOST_NAME: process.env.HOST.replace(/https?:\/\//, ""),
-    HOST_SCHEME: process.env.HOST.split("://")[0],
+    API_KEY: "efcbb8e78f4dfbb5ba79c6af17bdb890",
+    API_SECRET_KEY: "b1d2233ff014bda402497edae0e3f01c",
+    SCOPES: ['write_products', 'write_customers', 'write_draft_orders'],
+    HOST_NAME: "rajan-poc-app.aoa.rajasing.people.aws.dev",
+    HOST_SCHEME: "https",
     API_VERSION: ApiVersion.April22,
     IS_EMBEDDED_APP: true,
 });
