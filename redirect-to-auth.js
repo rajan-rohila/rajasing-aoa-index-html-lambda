@@ -31,7 +31,7 @@ function getClientSideRedirectResponse(query) {
 async function getServerSideRedirectResponse(req, query) {
     const redirectUrl = await Shopify.Auth.beginAuth(
         req,
-        {},
+        null,
         query.shop,
         "/api/auth/callback",
         false
@@ -40,7 +40,7 @@ async function getServerSideRedirectResponse(req, query) {
     return getRedirectResponse(redirectUrl);
 }
 
-export const getRedirectResponse = (url) => {
+const getRedirectResponse = (url) => {
     return {
         status: '302',
         headers: {
