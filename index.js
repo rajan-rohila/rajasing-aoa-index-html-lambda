@@ -1,8 +1,9 @@
 'use strict';
 
-import { Shopify, ApiVersion } from "@shopify/shopify-api";
+import shopifyApi from "@shopify/shopify-api";
 import queryString from 'query-string';
 
+const { Shopify, ApiVersion } = shopifyApi;
 import { AppInstallations } from './app_installations.js';
 
 Shopify.Context.initialize({
