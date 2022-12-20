@@ -1,6 +1,4 @@
-import shopifyApi from "@shopify/shopify-api";
-
-const { Shopify, ApiVersion } = shopifyApi;
+import { Shopify } from "@shopify/shopify-api";
 
 export const AppInstallations = {
   includes: async function (shopDomain) {

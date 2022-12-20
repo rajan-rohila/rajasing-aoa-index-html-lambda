@@ -1,9 +1,22 @@
 'use strict';
 
-import shopifyApi from "@shopify/shopify-api";
+//Temp code below to prevent node from trying to load sqlite3 and choking
+//https://github.com/Shopify/shopify-api-js/issues/410#issuecomment-1227409450
+import Module from "module";
+var originalRequire = Module.prototype.require;
+Module.prototype.require = function () {
+    if (arguments[0] === 'sqlite3') {
+        return {}
+    } else {
+        return originalRequire.apply(this, arguments);
+    }
+};
+
+import { Shopify, ApiVersion } from "@shopify/shopify-api";
+import "dotenv/config";
+
 import queryString from 'query-string';
 
-const { Shopify, ApiVersion } = shopifyApi;
 import { AppInstallations } from './app_installations.js';
 
 Shopify.Context.initialize({
