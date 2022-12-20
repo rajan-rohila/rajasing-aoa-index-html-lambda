@@ -1,17 +1,5 @@
 'use strict';
 
-//Temp code below to prevent node from trying to load sqlite3 and choking
-//https://github.com/Shopify/shopify-api-js/issues/410#issuecomment-1227409450
-import Module from "module";
-var originalRequire = Module.prototype.require;
-Module.prototype.require = function () {
-    if (arguments[0] === 'sqlite3') {
-        return {}
-    } else {
-        return originalRequire.apply(this, arguments);
-    }
-};
-
 import { Shopify, ApiVersion } from "@shopify/shopify-api";
 import "dotenv/config";
 
