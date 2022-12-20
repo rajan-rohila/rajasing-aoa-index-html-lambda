@@ -21,7 +21,7 @@ const DEFAULT_OBJECT = '/index.html';
 
 export const handler = async (event, context, callback) => {
     const res = event.Records[0].cf.request;
-    const qs = res.queryString;
+    const qs = res.querystring;
     const query = queryString.parse(qs);
 
     if (typeof query.shop !== "string") {
