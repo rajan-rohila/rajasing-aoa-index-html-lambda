@@ -31,7 +31,22 @@ function getClientSideRedirectResponse(query) {
 async function getServerSideRedirectResponse(req, query) {
     const redirectUrl = await Shopify.Auth.beginAuth(
         req,
-        null,
+        {
+            addTrailers: () => { },
+            end: () => { },
+            finished: false,
+            getHeader: () => { },
+            headersSent: false,
+            removeHeader: () => { },
+            sendDate: true,
+            setHeader: () => { },
+            setTimeout: () => { },
+            statusCode: () => { },
+            statusMessage: () => { },
+            write: () => { },
+            writeContinue: () => { },
+            writeHead: () => { },
+        },
         query.shop,
         "/api/auth/callback",
         false
