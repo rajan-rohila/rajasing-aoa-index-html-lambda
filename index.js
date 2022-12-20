@@ -7,6 +7,7 @@ import { join } from "path";
 import queryString from 'query-string';
 
 import { AppInstallations } from './app_installations.js';
+import redirectToAuth from "./redirect-to-auth.js";
 
 const sessionDb = new Shopify.Session.MemorySessionStorage();
 
@@ -40,8 +41,8 @@ const responseForNoShopParam = {
 const DEFAULT_OBJECT = '/index.html';
 
 export const handler = async (event, context, callback) => {
-    const res = event.Records[0].cf.request;
-    const qs = res.querystring;
+    const req = event.Records[0].cf.request;
+    const qs = req.querystring;
     const query = queryString.parse(qs);
 
     if (typeof query.shop !== "string") {
@@ -53,34 +54,35 @@ export const handler = async (event, context, callback) => {
     const appInstalled = await AppInstallations.includes(shop);
 
     if (!appInstalled) {
-        callback(null, getConsoleResponseInHtml("App is not installed!"));
+        const redirectToAuthResponse = await redirectToAuth(req, query);
+        callback(null, redirectToAuthResponse);
         return true;
     }
 
-    if (Shopify.Context.IS_EMBEDDED_APP && req.query.embedded !== "1") {
-        callback(null, getConsoleResponseInHtml("App is embedded, need embedded param as 1"));
+    if (Shopify.Context.IS_EMBEDDED_APP && query.embedded !== "1") {
+        const embeddedUrl = Shopify.Utils.getEmbeddedAppUrl(req);
+        callback(null, getRedirectResponse(embeddedUrl + req.origin.custom.path));
         return true;
     }
 
-
-    res.uri = DEFAULT_OBJECT;
-    callback(null, res);
+    //Serves index.html
+    req.uri = DEFAULT_OBJECT;
+    callback(null, req);
     return true;
 };
 
-const getConsoleResponseInHtml = (log) => {
+const getRedirectResponse = (url) => {
     return {
-        status: '500',
+        status: '302',
         headers: {
+            'location': [{
+                key: 'Location',
+                value: url,
+            }],
             'cache-control': [{
                 key: 'Cache-Control',
-                value: 'max-age=0'
+                value: "max-age=0"
             }],
-            'content-type': [{
-                key: 'Content-Type',
-                value: 'text/plain'
-            }]
         },
-        body: log,
     };
 }
