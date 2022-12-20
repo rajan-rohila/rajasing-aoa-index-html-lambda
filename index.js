@@ -2,10 +2,14 @@
 
 import { Shopify, ApiVersion } from "@shopify/shopify-api";
 import "dotenv/config";
+import { join } from "path";
 
 import queryString from 'query-string';
 
 import { AppInstallations } from './app_installations.js';
+
+const dbFile = join(process.cwd(), "database.sqlite");
+sessionDb = new Shopify.Session.SQLiteSessionStorage(dbFile);
 
 Shopify.Context.initialize({
     API_KEY: "efcbb8e78f4dfbb5ba79c6af17bdb890",
@@ -15,6 +19,8 @@ Shopify.Context.initialize({
     HOST_SCHEME: "https",
     API_VERSION: ApiVersion.April22,
     IS_EMBEDDED_APP: true,
+    // This should be replaced with your preferred storage strategy
+    SESSION_STORAGE: sessionDb,
 });
 
 const responseForNoShopParam = {
