@@ -5,6 +5,8 @@ export default async function redirectToAuth(req, query) {
         return getInternalServerErrorResponse("No shop provided")
     }
 
+    console.log("query.embedded is " + query.embedded);
+
     if (query.embedded === "1") {
         return getClientSideRedirectResponse(query);
     }
@@ -14,6 +16,8 @@ export default async function redirectToAuth(req, query) {
 }
 
 function getClientSideRedirectResponse(query) {
+    console.log("Starting : Doing client side redirect");
+
     const shop = Shopify.Utils.sanitizeShop(query.shop);
     const redirectUriParams = new URLSearchParams({
         shop,
@@ -25,10 +29,15 @@ function getClientSideRedirectResponse(query) {
         redirectUri: `https://${Shopify.Context.HOST_NAME}/api/auth?${redirectUriParams}`,
     }).toString();
 
+
+    console.log("Doing with : " + `/exitiframe?${queryParams}`)
+
     return getRedirectResponse(`/exitiframe?${queryParams}`);
 }
 
 async function getServerSideRedirectResponse(req, query) {
+    console.log("Starting : Server side redirect");
+
     const redirectUrl = await Shopify.Auth.beginAuth(
         req,
         {
