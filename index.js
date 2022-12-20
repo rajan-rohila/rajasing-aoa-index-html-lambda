@@ -53,7 +53,13 @@ export const handler = async (event, context, callback) => {
     const appInstalled = await AppInstallations.includes(shop);
 
     if (!appInstalled) {
-        console.log("App is not installed!");
+        callback(null, getConsoleResponseInHtml("App is not installed!"));
+        return true;
+    }
+
+    if (Shopify.Context.IS_EMBEDDED_APP && req.query.embedded !== "1") {
+        callback(null, getConsoleResponseInHtml("App is embedded, need embedded param as 1"));
+        return true;
     }
 
 
@@ -61,3 +67,20 @@ export const handler = async (event, context, callback) => {
     callback(null, res);
     return true;
 };
+
+const getConsoleResponseInHtml = (log) => {
+    return {
+        status: '500',
+        headers: {
+            'cache-control': [{
+                key: 'Cache-Control',
+                value: 'max-age=0'
+            }],
+            'content-type': [{
+                key: 'Content-Type',
+                value: 'text/plain'
+            }]
+        },
+        body: log,
+    };
+}
