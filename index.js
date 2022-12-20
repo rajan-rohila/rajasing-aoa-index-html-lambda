@@ -52,8 +52,10 @@ export const handler = async (event, context, callback) => {
         return true;
     }
 
-    const shop = Shopify.Utils.sanitizeShop(query.shop);
+    const shop = Shopify.Utils.sanitizeShop(req.query.shop);
+    console.log("Santized shop is after shopify sanitizeShop utility " + shop)
     const appInstalled = await AppInstallations.includes(shop);
+    console.log("Is app installed " + appInstalled);
 
     if (!appInstalled) {
         const redirectToAuthResponse = await redirectToAuth(req, query);
