@@ -1,6 +1,19 @@
 'use strict';
 
+import { Shopify, ApiVersion } from "@shopify/shopify-api";
 import queryString from 'query-string';
+
+import { AppInstallations } from './app_installations.js';
+
+Shopify.Context.initialize({
+    API_KEY: process.env.SHOPIFY_API_KEY,
+    API_SECRET_KEY: process.env.SHOPIFY_API_SECRET,
+    SCOPES: process.env.SCOPES.split(","),
+    HOST_NAME: process.env.HOST.replace(/https?:\/\//, ""),
+    HOST_SCHEME: process.env.HOST.split("://")[0],
+    API_VERSION: ApiVersion.April22,
+    IS_EMBEDDED_APP: true,
+});
 
 const responseForNoShopParam = {
     status: '500',
@@ -27,6 +40,13 @@ export const handler = async (event, context, callback) => {
     if (typeof query.shop !== "string") {
         callback(null, responseForNoShopParam);
         return true;
+    }
+
+    const shop = Shopify.Utils.sanitizeShop(query.shop);
+    const appInstalled = await AppInstallations.includes(shop);
+
+    if (!appInstalled) {
+        console.log("App is not installed!");
     }
 
 
