@@ -9,7 +9,7 @@ import queryString from 'query-string';
 import { AppInstallations } from './app_installations.js';
 
 const dbFile = join(process.cwd(), "database.sqlite");
-sessionDb = new Shopify.Session.SQLiteSessionStorage(dbFile);
+const sessionDb = new Shopify.Session.SQLiteSessionStorage(dbFile);
 
 Shopify.Context.initialize({
     API_KEY: "efcbb8e78f4dfbb5ba79c6af17bdb890",
